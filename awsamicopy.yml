@@ -1,0 +1,23 @@
+---
+- hosts: localhost
+  connection: local
+  remote_user: test
+  become: yes
+  gather_facts: no
+  vars_files:
+  - files/awscredskey.yml
+  tasks:
+  - name: copy ami from one region to another region
+    ec2_ami_copy:
+      aws_access_key: "{{ aws_id }}"  
+      aws_secret_key: "{{ aws_key }}"
+      region: ap-south-1
+      source_region: ap-south-1
+      dest_region: us-east-2
+      source_image_id: ami-00bf9b0c506a6fb24 
+      wait: no 
+      name: myneweastami
+      tags: 
+        Name:  myneweastami
+        Service: testeastserviceami
+    register: instance

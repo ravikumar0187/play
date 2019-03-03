@@ -1,0 +1,17 @@
+---
+- hosts: localhost
+  connection: local
+  remote_user: test
+  become: yes
+  gather_facts: no
+  vars_files:
+  - files/awscredskey.yml
+  tasks:
+  - name: create  a new key pair - mykeypairtest
+    ec2_key:
+      aws_access_key: "{{ aws_id }}"  
+      aws_secret_key: "{{ aws_key }}"
+      name: mykeypairtest
+      region: ap-south-1
+      state: present
+

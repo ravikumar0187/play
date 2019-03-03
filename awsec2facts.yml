@@ -1,0 +1,12 @@
+---
+- hosts: aws
+  remote_user: test
+  become: yes
+  connection: local
+  gather_facts: yes
+  tasks:
+  - name: Gather the EC2 Facts about running instance(s)
+    action: ec2_facts
+  - name: display the instance type
+    debug: msg='{{ ansible_ec2_instance_type }}'
+

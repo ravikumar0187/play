@@ -1,0 +1,67 @@
+---
+- hosts: aws
+  connection: local
+  remote_user: ec2-user
+  become: yes
+  gather_facts: yes
+  vars_files:
+  - ../files/awscredskey.yml
+  tasks:
+  - name: connect to the remote host, execute yum updates
+    yum: name=* state=latest
+  - name: Install httpd server
+    yum: name=httpd state=latest
+  - name: Deploy the static website
+    copy: src=../files/index.html dest=/var/www/html/index.html owner=root group=root mode=0655 backup=yes
+
+  - name: Restart the httpd server
+    service: name=httpd state=restarted 
+  - name: wait for the httpd port 80 to be listening
+    wait_for: host=ec2-13-233-62-5.ap-south-1.compute.amazonaws.com port=80 delay=5
+  - name: install wget to test the site
+    yum: name=wget state=latest
+  - name: display the site output results
+    debug: var=site_result
+
+- hosts: local
+  connection: local
+  remote_user: test
+  become: yes
+  gather_facts: no
+  vars_files:
+  - ../files/awscredskey.yml
+  tasks:    
+  - name: take a snapshot backup of the website directory
+    ec2_snapshot:
+      aws_access_key: "{{ aws_id }}"
+      aws_secret_key: "{{ aws_key }}"
+      region: ap-south-1
+      instance_ids: i-0b9384da2ceb5a70c
+      device_name: /dev/xvda
+      decription: initial playbook static site deployment backup
+      wait: no
+    register: snapshot_results
+    notify: 
+    - Displaysnapshotresults
+    - createnewamitemplate
+    - Displayamicreationresults
+  handlers:
+  - name: Displaysnapshotresults
+    debug: var=snapshot_results
+  - name: createnewamitemplate
+    ec2_ami: 
+      aws_access_key: "{{ aws_id }}"
+      aws_secret_key: "{{ aws_key }}"
+      region: ap-south-1
+      instance_ids: i-004d9e99cd7fa
+      wait: no
+      name: myansibletemplate123
+      tags: 
+        Name: mynewansibletemplate
+        Service: testamitemplate
+    register: ami_results
+  - name: Displayamicreationresults
+    debug: var=ami_results
+
+
+

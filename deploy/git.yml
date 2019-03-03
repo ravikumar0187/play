@@ -1,0 +1,13 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+  - name: update package on centos
+    yum: 
+      name: git
+      update_cache: yes
+      state: present
+  - name: install tree
+    yum:
+      name: tree
+      state: present

@@ -1,0 +1,33 @@
+---
+- hosts: all
+  connection: local
+  remote_user: ec2-user
+  become: yes
+  gather_facts: yes
+  vars_files:
+  - ../files/awscredskey.yml
+  tasks:
+  - name: Install httpd server
+    yum:
+      name: httpd
+      update_cache: yes
+      state: latest
+  - name: Deploy the static website
+    copy:
+      src: ../files/index.html
+      dest: /var/www/html/index.html
+      owner: root
+      group: root
+      mode: 0655
+      backup: yes
+     ## remote_src: yes 
+  - name: Restart the httpd service
+    service:
+      name: httpd 
+      state: restarted 
+ 
+
+
+
+
+

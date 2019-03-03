@@ -1,0 +1,16 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+  - name: Deploy index.html
+    copy: 
+      src: /etc/ansible/playbooks/files/index.html
+      dest: /var/www/html/index.html
+      mode: 0655
+      owner: root
+      group: root 
+  - name: restart httpd
+    service:
+      name: httpd
+      state: restarted
+
