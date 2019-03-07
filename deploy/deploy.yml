@@ -1,0 +1,12 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+  - name: Deploying a web application
+    get_url:
+      url: http://192.168.12.40:8081/nexus/content/repositories/snap1/com/wakaleo/gameoflife/gameoflife-web/1.0-SNAPSHOT/gameoflife-web-1.0-20190306.165205-1.war
+      dest: /root/apache-tomcat-7.0.93/webapps
+  - name: restart apache tomact
+    service:
+      name: tomcat
+      state: restarted

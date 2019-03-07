@@ -12,7 +12,7 @@
       aws_access_key: "{{ aws_id }}"  
       aws_secret_key: "{{ aws_key }}"
       region: ap-south-1
-      instance_id: i-0aa637ed73a9c43b2
+      instance_id: i-0f00e4b5bb0867bb4
       wait: no
       name: mynewami1
       tags:   

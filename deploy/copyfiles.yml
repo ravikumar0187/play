@@ -1,0 +1,11 @@
+---
+- hosts: all
+  become: yes
+  gather_facts: no
+  tasks:
+  - git:
+            url: https://github.com/ncodeitgithub1/dvos10sd01.git
+      dest: /etc/ansible/playbooks/cloning
+
+
+ 

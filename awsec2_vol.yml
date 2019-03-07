@@ -12,7 +12,7 @@
       aws_access_key: "{{ aws_id }}"
       aws_secret_key: "{{ aws_key }}"
       region: ap-south-1
-      instance: i-0dd1ac2aaeda0c491
+      instance: i-0f00e4b5bb0867bb4
       state: list    
       tags: 
         Name: vil
